@@ -36,9 +36,10 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
     playPop();
     setIsOpen(false);
     startTransition(async () => {
+      document.cookie = `active_business_id=${bizId}; path=/; max-age=31536000; SameSite=Lax`;
       await switchActiveBusiness(bizId);
       playSuccess();
-      router.refresh();
+      window.location.reload();
     });
   };
 
@@ -54,8 +55,11 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
         setModalError(res.error);
       } else {
         playSuccess();
+        if (res.businessId) {
+          document.cookie = `active_business_id=${res.businessId}; path=/; max-age=31536000; SameSite=Lax`;
+        }
         setIsModalOpen(false);
-        router.refresh();
+        window.location.reload();
       }
     });
   };
