@@ -96,12 +96,10 @@ export default function DashboardLayout({
         </div>
 
         {/* Client / Business Switcher */}
-        {businesses.length > 0 && (
-          <ClientSwitcher
-            currentBusiness={currentBiz}
-            businesses={businesses}
-          />
-        )}
+        <ClientSwitcher
+          currentBusiness={currentBiz}
+          businesses={businesses}
+        />
 
         {/* Navigation links */}
         <nav className="flex-1 px-3 py-6 space-y-1">
