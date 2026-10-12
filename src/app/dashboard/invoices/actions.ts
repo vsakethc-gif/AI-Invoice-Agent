@@ -4,17 +4,26 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
+import { cookies } from "next/headers";
+
 export async function createInvoice(formData: FormData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) return { error: "Not authenticated" };
 
-  const { data: business } = await supabase
-    .from("businesses")
-    .select("id")
-    .eq("user_id", user.id)
-    .single();
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_business_id")?.value;
+
+  let business = null;
+  if (activeId) {
+    const { data: b } = await supabase.from("businesses").select("id").eq("id", activeId).eq("user_id", user.id).single();
+    business = b;
+  }
+  if (!business) {
+    const { data: first } = await supabase.from("businesses").select("id").eq("user_id", user.id).order("created_at", { ascending: true }).limit(1).single();
+    business = first;
+  }
 
   if (!business) return { error: "No business found" };
 
@@ -48,11 +57,18 @@ export async function uploadInvoices(invoices: any[]) {
 
   if (!user) return { error: "Not authenticated" };
 
-  const { data: business } = await supabase
-    .from("businesses")
-    .select("id")
-    .eq("user_id", user.id)
-    .single();
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_business_id")?.value;
+
+  let business = null;
+  if (activeId) {
+    const { data: b } = await supabase.from("businesses").select("id").eq("id", activeId).eq("user_id", user.id).single();
+    business = b;
+  }
+  if (!business) {
+    const { data: first } = await supabase.from("businesses").select("id").eq("user_id", user.id).order("created_at", { ascending: true }).limit(1).single();
+    business = first;
+  }
 
   if (!business) return { error: "No business found" };
 

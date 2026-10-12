@@ -1,4 +1,5 @@
 import { connection } from "next/server";
+import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { DashboardView } from "./components/DashboardView";
@@ -14,12 +15,18 @@ export default async function DashboardPage() {
     return null;
   }
 
-  // Fetch business stats
-  const { data: business } = await supabase
-    .from("businesses")
-    .select("*")
-    .eq("user_id", user.id)
-    .single();
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_business_id")?.value;
+
+  let business = null;
+  if (activeId) {
+    const { data: b } = await supabase.from("businesses").select("*").eq("id", activeId).eq("user_id", user.id).single();
+    business = b;
+  }
+  if (!business) {
+    const { data: first } = await supabase.from("businesses").select("*").eq("user_id", user.id).order("created_at", { ascending: true }).limit(1).single();
+    business = first;
+  }
 
   if (!business) {
     return (

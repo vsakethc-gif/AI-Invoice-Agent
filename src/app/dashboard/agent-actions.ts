@@ -23,13 +23,29 @@ const AUTOPILOT_MIN_APPROVALS = 5;
 
 type Result<T = object> = ({ ok: true } & T) | { ok: false; error: string; violations?: string[] };
 
+import { cookies } from "next/headers";
+
 async function getContext() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("You are not signed in.");
-  const { data: business } = await supabase.from("businesses").select("*").eq("user_id", user.id).single();
+
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_business_id")?.value;
+
+  let business = null;
+  if (activeId) {
+    const { data: b } = await supabase.from("businesses").select("*").eq("id", activeId).eq("user_id", user.id).single();
+    business = b;
+  }
+
+  if (!business) {
+    const { data: first } = await supabase.from("businesses").select("*").eq("user_id", user.id).order("created_at", { ascending: true }).limit(1).single();
+    business = first;
+  }
+
   if (!business) throw new Error("Finish onboarding first.");
   return { supabase, business: business as BusinessRow & { send_mode: string } };
 }

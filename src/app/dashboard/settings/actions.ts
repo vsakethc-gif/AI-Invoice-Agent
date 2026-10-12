@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export async function updateSettings(formData: FormData) {
   const supabase = await createClient();
@@ -31,10 +32,17 @@ export async function updateSettings(formData: FormData) {
     late_fee_percentage: parseFloat(formData.get("late_fee_percentage") as string) || 0,
   };
 
-  const { error } = await supabase
-    .from("businesses")
-    .update(updates)
-    .eq("user_id", user.id);
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_business_id")?.value;
+
+  let query = supabase.from("businesses").update(updates);
+  if (activeId) {
+    query = query.eq("id", activeId).eq("user_id", user.id);
+  } else {
+    query = query.eq("user_id", user.id);
+  }
+
+  const { error } = await query;
 
   if (error) {
     console.error("Failed to update settings:", error);
@@ -42,5 +50,6 @@ export async function updateSettings(formData: FormData) {
   }
 
   revalidatePath("/dashboard/settings");
+  revalidatePath("/dashboard");
   return { success: true };
 }

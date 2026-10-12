@@ -17,6 +17,9 @@ import { createClient } from "@/utils/supabase/client";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+import { ClientSwitcher } from "./components/ClientSwitcher";
+import { type BusinessSummary } from "./business-actions";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -27,11 +30,36 @@ export default function DashboardLayout({
   const supabase = createClient();
   
   const [theme, setTheme] = useState({ color: 'indigo', density: 'cozy' });
+  const [currentBiz, setCurrentBiz] = useState<BusinessSummary | null>(null);
+  const [businesses, setBusinesses] = useState<BusinessSummary[]>([]);
 
   useEffect(() => {
-    supabase.from('businesses').select('theme_color, ui_density').single().then(({ data }) => {
-      if (data) setTheme({ color: data.theme_color || 'indigo', density: data.ui_density || 'cozy' });
-    });
+    async function loadData() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: list } = await supabase
+        .from('businesses')
+        .select('id, name, owner_name, reply_to_email, theme_color, ui_density, total_recovered')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true });
+
+      if (list && list.length > 0) {
+        setBusinesses(list);
+        
+        // Check cookie or fallback to first
+        const activeCookie = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('active_business_id='))
+          ?.split('=')[1];
+
+        const active = list.find(b => b.id === activeCookie) || list[0];
+        setCurrentBiz(active);
+        setTheme({ color: active.theme_color || 'indigo', density: active.ui_density || 'cozy' });
+      }
+    }
+
+    loadData();
   }, [supabase]);
 
   const navigation = [
@@ -61,11 +89,19 @@ export default function DashboardLayout({
               <span className="text-base font-bold text-white tracking-tight block">InvoiceNudge</span>
               <span className="text-[10px] text-blue-400 font-medium tracking-wide uppercase flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                AI Active
+                Agency Suite
               </span>
             </div>
           </Link>
         </div>
+
+        {/* Client / Business Switcher */}
+        {businesses.length > 0 && (
+          <ClientSwitcher
+            currentBusiness={currentBiz}
+            businesses={businesses}
+          />
+        )}
 
         {/* Navigation links */}
         <nav className="flex-1 px-3 py-6 space-y-1">

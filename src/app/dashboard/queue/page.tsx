@@ -1,4 +1,5 @@
 import { connection } from "next/server";
+import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { QueueView, type QueueMessage } from "./QueueView";
 import { activeModelLabel } from "@/lib/llm";
@@ -13,7 +14,18 @@ export default async function QueuePage() {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const { data: business } = await supabase.from("businesses").select("*").eq("user_id", user.id).single();
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_business_id")?.value;
+
+  let business = null;
+  if (activeId) {
+    const { data: b } = await supabase.from("businesses").select("*").eq("id", activeId).eq("user_id", user.id).single();
+    business = b;
+  }
+  if (!business) {
+    const { data: first } = await supabase.from("businesses").select("*").eq("user_id", user.id).order("created_at", { ascending: true }).limit(1).single();
+    business = first;
+  }
   if (!business) return null;
 
   // Drafts waiting for the owner (RLS guarantees only this business's rows come back)

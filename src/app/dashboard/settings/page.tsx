@@ -4,16 +4,25 @@ import { SettingsForm } from "./SettingsForm";
 
 export const instant = false;
 
+import { cookies } from "next/headers";
+
 export default async function SettingsPage() {
   await connection();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const { data: business } = await supabase
-    .from("businesses")
-    .select("*")
-    .eq("user_id", user?.id)
-    .single();
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_business_id")?.value;
+
+  let business = null;
+  if (activeId) {
+    const { data: b } = await supabase.from("businesses").select("*").eq("id", activeId).eq("user_id", user?.id).single();
+    business = b;
+  }
+  if (!business && user?.id) {
+    const { data: first } = await supabase.from("businesses").select("*").eq("user_id", user.id).order("created_at", { ascending: true }).limit(1).single();
+    business = first;
+  }
 
   return (
     <div className="max-w-3xl space-y-8 pb-12">
