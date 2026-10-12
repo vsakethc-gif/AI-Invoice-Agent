@@ -72,36 +72,114 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
 
   return (
     <>
-      {/* Switcher Trigger & Dedicated Action */}
-      <div className="relative px-3 pt-3 pb-3 border-b border-slate-800/80">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 text-left border border-slate-800/80 hover:border-slate-700 transition shadow-sm group"
-        >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-7 h-7 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center flex-shrink-0 text-indigo-400">
-              <Building2 className="w-4 h-4" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                <span>Client Account</span>
-                {businesses.length > 1 && (
-                  <span className="px-1.5 py-0.2 bg-slate-800 text-[9px] text-slate-300 rounded font-mono">
-                    {businesses.length}
-                  </span>
-                )}
+      {/* Switcher & Onboard Section */}
+      <div className="px-3 pt-3 pb-3 border-b border-slate-800/80 space-y-2">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            Active Client Account
+          </span>
+          {businesses.length > 0 && (
+            <span className="px-1.5 py-0.5 bg-slate-800 text-[10px] text-slate-300 rounded font-mono">
+              {businesses.length} total
+            </span>
+          )}
+        </div>
+
+        {/* Trigger */}
+        <div className="relative">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 text-left border border-slate-800 hover:border-slate-700 transition shadow-sm group"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center flex-shrink-0 text-indigo-400">
+                <Building2 className="w-4 h-4" />
               </div>
-              <div className="text-xs font-bold text-white truncate tracking-tight">
-                {currentBusiness?.name || "Select Client"}
+              <div className="min-w-0 flex-1">
+                <div className="text-xs font-bold text-white truncate tracking-tight">
+                  {currentBusiness?.name || "Select Client"}
+                </div>
+                <div className="text-[11px] text-slate-400 truncate">
+                  {currentBusiness?.owner_name || "Manage client"}
+                </div>
               </div>
             </div>
-          </div>
-          <ChevronDown
-            className={`w-3.5 h-3.5 text-slate-400 group-hover:text-slate-200 transition-transform duration-200 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
-        </button>
+            <ChevronDown
+              className={`w-4 h-4 text-slate-400 group-hover:text-slate-200 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {/* Dropdown Menu */}
+          <AnimatePresence>
+            {isOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-30"
+                  onClick={() => setIsOpen(false)}
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-40 overflow-hidden divide-y divide-slate-800"
+                >
+                  {/* TOP CTA: Onboard New Client (Prominently at the top!) */}
+                  <div className="p-3 bg-indigo-950/70 border-b border-indigo-800/50">
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition active:scale-95"
+                    >
+                      <Plus className="w-4 h-4 stroke-[2.5]" />
+                      <span>+ Onboard New Client</span>
+                    </button>
+                    <p className="text-[10px] text-indigo-300 text-center mt-1.5 font-medium">
+                      Launch 14-day cash recovery pilot
+                    </p>
+                  </div>
+
+                  {/* Client List */}
+                  <div className="max-h-60 overflow-y-auto py-1 divide-y divide-slate-800/40">
+                    <div className="px-3 py-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                      Switch Client ({businesses.length})
+                    </div>
+                    {businesses.map((biz) => {
+                      const isSelected = biz.id === currentBusiness?.id;
+                      return (
+                        <button
+                          key={biz.id}
+                          onClick={() => handleSelect(biz.id)}
+                          disabled={isPending}
+                          className={`w-full flex items-center justify-between px-3 py-2.5 text-left text-xs transition ${
+                            isSelected
+                              ? "bg-indigo-600/20 text-white font-bold"
+                              : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className={`w-2 h-2 rounded-full ${isSelected ? "bg-indigo-400 ring-4 ring-indigo-400/20" : "bg-slate-600"}`} />
+                            <div className="truncate">
+                              <span className="block truncate font-medium text-white">{biz.name}</span>
+                              <span className="text-[10px] text-slate-400 truncate block">
+                                {biz.owner_name} • {biz.reply_to_email}
+                              </span>
+                            </div>
+                          </div>
+                          {isSelected && <Check className="w-4 h-4 text-indigo-400 flex-shrink-0 ml-2" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Dedicated Prominent Onboard Client Button in Sidebar */}
         <button
@@ -109,79 +187,13 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
             playPop();
             setIsModalOpen(true);
           }}
-          className="w-full mt-2.5 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/25 border border-indigo-400/25 transition-all duration-150 active:scale-[0.98] group"
+          className="w-full flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold shadow-md shadow-indigo-600/25 border border-indigo-400/25 transition-all duration-150 active:scale-[0.98] group"
         >
           <div className="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
           </div>
-          <span>Onboard New Client</span>
+          <span>+ Onboard New Client</span>
         </button>
-
-        {/* Dropdown Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <>
-              <div
-                className="fixed inset-0 z-30"
-                onClick={() => setIsOpen(false)}
-              />
-              <motion.div
-                initial={{ opacity: 0, y: -4, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                transition={{ duration: 0.15 }}
-                className="absolute left-3 right-3 top-full mt-1 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-40 overflow-hidden divide-y divide-slate-800/60"
-              >
-                {/* Client List */}
-                <div className="max-h-56 overflow-y-auto py-1">
-                  {businesses.map((biz) => {
-                    const isSelected = biz.id === currentBusiness?.id;
-                    return (
-                      <button
-                        key={biz.id}
-                        onClick={() => handleSelect(biz.id)}
-                        disabled={isPending}
-                        className={`w-full flex items-center justify-between px-3 py-2 text-left text-xs transition ${
-                          isSelected
-                            ? "bg-indigo-600/15 text-white font-semibold"
-                            : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-indigo-400" : "bg-slate-600"}`} />
-                          <div className="truncate">
-                            <span className="block truncate">{biz.name}</span>
-                            <span className="text-[10px] text-slate-500 truncate block">
-                              {biz.owner_name}
-                            </span>
-                          </div>
-                        </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0 ml-2" />}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Add New Client CTA */}
-                <div className="p-3 bg-slate-950/95 border-t border-slate-800/80">
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      setIsModalOpen(true);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition active:scale-95"
-                  >
-                    <Plus className="w-4 h-4 stroke-[2.5]" />
-                    <span>Onboard New Client</span>
-                  </button>
-                  <p className="text-[10px] text-slate-400 text-center mt-2 leading-tight">
-                    Add another client company to your agency portal
-                  </p>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Onboard Client Modal */}

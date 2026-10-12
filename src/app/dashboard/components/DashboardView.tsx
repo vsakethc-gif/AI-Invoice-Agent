@@ -300,7 +300,17 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 self-end sm:self-auto">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-800 border border-indigo-300">
+          <button
+            onClick={() => {
+              playPop();
+              window.dispatchEvent(new CustomEvent("open-onboard-client"));
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition active:scale-95"
+          >
+            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>+ Onboard Client</span>
+          </button>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-50 text-indigo-800 border border-indigo-200">
             <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
             Client Account Active
           </span>
