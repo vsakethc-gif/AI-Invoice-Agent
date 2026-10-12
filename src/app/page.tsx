@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Zap, Clock, Mail, ShieldCheck, TrendingUp, Users, DollarSign, Award, Building2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { CalculatorModal } from './components/CalculatorModal';
 
 export default function LandingPage() {
   const triggerConfetti = () => {
@@ -70,9 +71,10 @@ export default function LandingPage() {
                   Request a 14-Day Free Sprint <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
+              <CalculatorModal />
               <Link href="#pricing">
-                <button className="w-full sm:w-auto px-7 py-3.5 bg-white text-slate-800 border border-slate-300 rounded-xl font-bold text-base hover:bg-slate-50 transition active:scale-95 shadow-sm">
-                  View Performance Pricing
+                <button className="w-full sm:w-auto px-6 py-3.5 bg-white text-slate-800 border border-slate-300 rounded-xl font-bold text-sm hover:bg-slate-50 transition active:scale-95 shadow-sm">
+                  Pricing Options
                 </button>
               </Link>
             </div>

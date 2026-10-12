@@ -33,6 +33,7 @@ import { playSuccess, playPop } from "@/utils/sfx";
 import { useRouter } from "next/navigation";
 import { DemoDataButton } from "./DemoDataButton";
 import { ClientReportModal } from "./ClientReportModal";
+import { SalesCheatSheetModal } from "./SalesCheatSheetModal";
 import {
   updateInvoiceStatus,
   createDraftForInvoice,
@@ -323,6 +324,8 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
 
         {/* Action Buttons with high-appeal interactive physics */}
         <div className="flex items-center flex-wrap gap-2.5">
+          <SalesCheatSheetModal />
+
           <ClientReportModal
             businessName={business.name}
             totalRecovered={metrics.find((m) => m.id === "recovered")?.value ? invoices.filter(i => i.status === "paid").reduce((s, i) => s + Number(i.amount || 0), 0) : 0}
