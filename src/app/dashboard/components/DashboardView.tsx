@@ -26,6 +26,7 @@ import {
   Send,
   HelpCircle,
   Eye,
+  Building2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
@@ -324,6 +325,17 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
 
         {/* Action Buttons with high-appeal interactive physics */}
         <div className="flex items-center flex-wrap gap-2.5">
+          <button
+            onClick={() => {
+              playPop();
+              window.dispatchEvent(new CustomEvent("open-onboard-client"));
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-2.5 border border-indigo-200/90 shadow-sm text-xs font-bold rounded-xl text-indigo-700 bg-indigo-50/90 hover:bg-indigo-100 hover:border-indigo-300 active:scale-95 transition duration-150"
+          >
+            <Building2 className="w-4 h-4 text-indigo-600" />
+            + Onboard Client
+          </button>
+
           <SalesCheatSheetModal />
 
           <ClientReportModal

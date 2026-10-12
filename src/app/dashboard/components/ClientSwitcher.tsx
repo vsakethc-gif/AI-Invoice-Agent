@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   Building2,
@@ -27,6 +27,12 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [modalError, setModalError] = useState("");
+
+  useEffect(() => {
+    const handleOpen = () => setIsModalOpen(true);
+    window.addEventListener("open-onboard-client", handleOpen);
+    return () => window.removeEventListener("open-onboard-client", handleOpen);
+  }, []);
 
   const handleSelect = (bizId: string) => {
     if (bizId === currentBusiness?.id) {
@@ -66,8 +72,8 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
 
   return (
     <>
-      {/* Switcher Trigger */}
-      <div className="relative px-3 pt-3 pb-2 border-b border-slate-800/80">
+      {/* Switcher Trigger & Dedicated Action */}
+      <div className="relative px-3 pt-3 pb-3 border-b border-slate-800/80">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 text-left border border-slate-800/80 hover:border-slate-700 transition shadow-sm group"
@@ -80,7 +86,7 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
               <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                 <span>Client Account</span>
                 {businesses.length > 1 && (
-                  <span className="px-1 py-0.2 bg-slate-800 text-[9px] text-slate-300 rounded font-mono">
+                  <span className="px-1.5 py-0.2 bg-slate-800 text-[9px] text-slate-300 rounded font-mono">
                     {businesses.length}
                   </span>
                 )}
@@ -95,6 +101,20 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
               isOpen ? "rotate-180" : ""
             }`}
           />
+        </button>
+
+        {/* Dedicated Prominent Onboard Client Button in Sidebar */}
+        <button
+          onClick={() => {
+            playPop();
+            setIsModalOpen(true);
+          }}
+          className="w-full mt-2.5 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/25 border border-indigo-400/25 transition-all duration-150 active:scale-[0.98] group"
+        >
+          <div className="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+            <Plus className="w-3.5 h-3.5 stroke-[3]" />
+          </div>
+          <span>Onboard New Client</span>
         </button>
 
         {/* Dropdown Menu */}
@@ -143,17 +163,20 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
                 </div>
 
                 {/* Add New Client CTA */}
-                <div className="p-1.5 bg-slate-950/60">
+                <div className="p-3 bg-slate-950/95 border-t border-slate-800/80">
                   <button
                     onClick={() => {
                       setIsOpen(false);
                       setIsModalOpen(true);
                     }}
-                    className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-sm transition active:scale-95"
+                    className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition active:scale-95"
                   >
-                    <Plus className="w-3.5 h-3.5" />
+                    <Plus className="w-4 h-4 stroke-[2.5]" />
                     <span>Onboard New Client</span>
                   </button>
+                  <p className="text-[10px] text-slate-400 text-center mt-2 leading-tight">
+                    Add another client company to your agency portal
+                  </p>
                 </div>
               </motion.div>
             </>
@@ -164,36 +187,36 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
       {/* Onboard Client Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden text-slate-900"
+              className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden text-slate-900 my-auto flex flex-col max-h-[90vh]"
             >
               {/* Header */}
-              <div className="px-6 py-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-                    <Briefcase className="w-4 h-4 text-white" />
+              <div className="px-6 py-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-600/30">
+                    <Briefcase className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-white leading-tight">Onboard New Client</h3>
-                    <p className="text-xs text-slate-400">Add a business to manage under your agency</p>
+                    <p className="text-xs text-slate-400 mt-0.5">Add a business to manage under your cash recovery agency</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Form */}
-              <form onSubmit={handleCreateClient} className="p-6 space-y-4">
+              <form onSubmit={handleCreateClient} className="flex-1 overflow-y-auto p-6 sm:p-7 space-y-4 text-slate-900">
                 {modalError && (
-                  <div className="p-3 bg-rose-50 text-rose-700 text-xs rounded-xl border border-rose-200">
+                  <div className="p-3.5 bg-rose-50 text-rose-700 text-xs rounded-xl border border-rose-200 font-medium">
                     {modalError}
                   </div>
                 )}
@@ -206,7 +229,7 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
                     name="name"
                     required
                     placeholder="e.g. Acme Plumbing or Apex Design Studio"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white text-slate-900"
                   />
                 </div>
 
@@ -218,7 +241,7 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
                     name="owner_name"
                     required
                     placeholder="e.g. Michael Scott"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white text-slate-900"
                   />
                 </div>
 
@@ -231,9 +254,9 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
                     type="email"
                     required
                     placeholder="e.g. billing@acmeplumbing.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white text-slate-900"
                   />
-                  <p className="text-[11px] text-slate-500 mt-1">
+                  <p className="text-[11px] text-slate-500 mt-1.5">
                     When customers reply to AI follow-ups, their emails will go directly to this address.
                   </p>
                 </div>
@@ -245,7 +268,7 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
                   <select
                     name="default_tone"
                     defaultValue="Professional"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-900"
                   >
                     <option value="Friendly">Friendly (Warm & gentle)</option>
                     <option value="Professional">Professional (Polite & direct)</option>
@@ -254,18 +277,18 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="pt-3 flex gap-2">
+                <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 transition"
+                    className="flex-1 py-3 px-4 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 transition"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isPending}
-                    className="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/20 transition active:scale-95 disabled:opacity-50"
+                    className="flex-1 py-3 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/20 transition active:scale-95 disabled:opacity-50"
                   >
                     {isPending ? "Adding Client..." : "Create Client Account"}
                   </button>
