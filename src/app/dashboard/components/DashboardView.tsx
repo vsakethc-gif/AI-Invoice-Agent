@@ -35,6 +35,10 @@ import { useRouter } from "next/navigation";
 import { DemoDataButton } from "./DemoDataButton";
 import { ClientReportModal } from "./ClientReportModal";
 import { SalesCheatSheetModal } from "./SalesCheatSheetModal";
+import { CashAuditModal } from "./CashAuditModal";
+import { PilotAgreementModal } from "./PilotAgreementModal";
+import { WeeklyRoiSummaryModal } from "./WeeklyRoiSummaryModal";
+import { CadenceTemplatesModal } from "./CadenceTemplatesModal";
 import {
   updateInvoiceStatus,
   createDraftForInvoice,
@@ -62,6 +66,7 @@ interface DashboardViewProps {
     owner_name: string;
     send_mode: string;
     total_recovered: number;
+    reply_to_email?: string;
   };
   initialInvoices: Invoice[];
 }
@@ -301,16 +306,24 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 self-end sm:self-auto">
           <Link
+            href={`/portal/${business.id}`}
+            target="_blank"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-50 shadow-xs transition"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Live Client Portal</span>
+          </Link>
+          <Link
             href="/dashboard/clients/new"
             onClick={() => playPop()}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-xs transition active:scale-95"
           >
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>+ Onboard Client</span>
           </Link>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-50 text-indigo-800 border border-indigo-200">
             <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-            Client Account Active
+            Client Active
           </span>
         </div>
       </motion.div>
@@ -342,11 +355,30 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
             + Onboard Client
           </Link>
 
+          <CashAuditModal defaultBusinessName={business.name} />
+
+          <PilotAgreementModal
+            businessName={business.name}
+            ownerName={business.owner_name}
+            replyToEmail={business.reply_to_email}
+          />
+
+          <WeeklyRoiSummaryModal
+            businessName={business.name}
+            ownerName={business.owner_name}
+            totalRecovered={invoices.filter((i) => i.status === "paid").reduce((s, i) => s + Number(i.amount || 0), 0)}
+            paidCount={invoices.filter((i) => i.status === "paid").length}
+            outstandingAmount={invoices.filter((i) => i.status !== "paid").reduce((s, i) => s + Number(i.amount || 0), 0)}
+            activeCount={invoices.filter((i) => i.status !== "paid").length}
+          />
+
+          <CadenceTemplatesModal />
+
           <SalesCheatSheetModal />
 
           <ClientReportModal
             businessName={business.name}
-            totalRecovered={metrics.find((m) => m.id === "recovered")?.value ? invoices.filter(i => i.status === "paid").reduce((s, i) => s + Number(i.amount || 0), 0) : 0}
+            totalRecovered={invoices.filter(i => i.status === "paid").reduce((s, i) => s + Number(i.amount || 0), 0)}
             paidCount={invoices.filter((i) => i.status === "paid").length}
             overdueRemaining={invoices.filter((i) => (i.due_date < todayStr || i.status === "overdue") && i.status !== "paid").reduce((s, i) => s + Number(i.amount || 0), 0)}
             overdueCount={invoices.filter((i) => (i.due_date < todayStr || i.status === "overdue") && i.status !== "paid").length}

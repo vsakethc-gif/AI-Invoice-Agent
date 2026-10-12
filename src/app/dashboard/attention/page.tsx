@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { AlertCircle, ArrowUpRight, DollarSign, Calendar, Mail } from "lucide-react";
+import { SettlementAssistantModal } from "./SettlementAssistantModal";
 
 export const instant = false;
 
@@ -84,6 +85,11 @@ export default async function NeedsAttentionPage() {
               </div>
 
               <div className="flex items-center gap-2">
+                <SettlementAssistantModal
+                  invoice={inv}
+                  businessName={business?.name}
+                  replyToEmail={business?.reply_to_email}
+                />
                 <Link
                   href="/dashboard"
                   className="px-3.5 py-2 text-xs font-bold bg-white border border-slate-300 rounded-xl hover:bg-slate-50 text-slate-700 transition"

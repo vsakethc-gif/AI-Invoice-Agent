@@ -13,10 +13,13 @@ import {
   Mail,
   ShieldCheck,
   Zap,
+  ExternalLink,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { switchActiveBusiness, type BusinessSummary } from "../business-actions";
 import { playPop, playSuccess } from "@/utils/sfx";
+import { CashAuditModal } from "../components/CashAuditModal";
+import { PilotAgreementModal } from "../components/PilotAgreementModal";
 
 interface ClientsViewProps {
   businesses: BusinessSummary[];
@@ -65,17 +68,19 @@ export function ClientsView({ businesses, activeBusinessId }: ClientsViewProps) 
           </p>
         </div>
 
-        {/* Primary Action Button */}
-        <div>
+        {/* Action Buttons */}
+        <div className="flex items-center flex-wrap gap-2.5">
+          <CashAuditModal />
+          <PilotAgreementModal />
           <Link
             href="/dashboard/clients/new"
             onClick={() => playPop()}
-            className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-sm font-bold shadow-lg shadow-indigo-600/30 active:scale-95 transition-all duration-150"
+            className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold shadow-md shadow-indigo-600/25 active:scale-95 transition-all duration-150"
           >
-            <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center text-white">
-              <Plus className="w-4 h-4 stroke-[3]" />
+            <div className="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-white">
+              <Plus className="w-3 h-3 stroke-[3]" />
             </div>
-            <span>Onboard New Client</span>
+            <span>+ Onboard New Client</span>
           </Link>
         </div>
       </div>
@@ -170,22 +175,30 @@ export function ClientsView({ businesses, activeBusinessId }: ClientsViewProps) 
                   </div>
                 </div>
 
-                <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <Link
+                    href={`/portal/${biz.id}`}
+                    target="_blank"
+                    className="flex-1 py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-1.5"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Live Portal</span>
+                  </Link>
                   {isActive ? (
                     <button
                       disabled
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-100 text-slate-500 text-xs font-bold cursor-default flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2 px-3 rounded-xl bg-slate-100 text-slate-500 text-xs font-bold cursor-default flex items-center justify-center gap-1.5"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                      <span>Active Workspace</span>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
+                      <span>Active</span>
                     </button>
                   ) : (
                     <button
                       onClick={() => handleSwitch(biz.id)}
                       disabled={isPending}
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 active:scale-95"
+                      className="flex-1 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 active:scale-95"
                     >
-                      <span>Switch to this Client</span>
+                      <span>Switch</span>
                       <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
                     </button>
                   )}
