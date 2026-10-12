@@ -80,7 +80,7 @@ export default function DashboardLayout({
   return (
     <div className={`min-h-screen bg-slate-50 flex flex-col md:flex-row antialiased selection:bg-blue-500 selection:text-white theme-${theme.color} density-${theme.density}`}>
       {/* Sidebar */}
-      <aside className="w-full md:w-72 bg-slate-950/95 backdrop-blur-xl text-slate-200 border-r border-slate-800 flex flex-col flex-shrink-0 relative z-20 shadow-2xl">
+      <aside className="w-full md:w-72 bg-slate-950 text-slate-200 border-r border-slate-800 flex flex-col flex-shrink-0 relative z-20 shadow-2xl">
         {/* Brand header */}
         <div className="h-18 px-6 flex items-center justify-between border-b border-slate-800/80">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">

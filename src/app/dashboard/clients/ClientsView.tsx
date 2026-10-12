@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import {
   Building2,
   Plus,
@@ -66,15 +67,16 @@ export function ClientsView({ businesses, activeBusinessId }: ClientsViewProps) 
 
         {/* Primary Action Button */}
         <div>
-          <button
-            onClick={handleOpenOnboardModal}
+          <Link
+            href="/dashboard/clients/new"
+            onClick={() => playPop()}
             className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-sm font-bold shadow-lg shadow-indigo-600/30 active:scale-95 transition-all duration-150"
           >
             <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center text-white">
               <Plus className="w-4 h-4 stroke-[3]" />
             </div>
             <span>Onboard New Client</span>
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -193,8 +195,9 @@ export function ClientsView({ businesses, activeBusinessId }: ClientsViewProps) 
           })}
 
           {/* Dotted Onboard New Client Card */}
-          <button
-            onClick={handleOpenOnboardModal}
+          <Link
+            href="/dashboard/clients/new"
+            onClick={() => playPop()}
             className="p-6 rounded-2xl border-2 border-dashed border-indigo-200 hover:border-indigo-400 bg-indigo-50/30 hover:bg-indigo-50/60 transition group flex flex-col items-center justify-center text-center gap-3 min-h-[220px]"
           >
             <div className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-indigo-100 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
@@ -208,7 +211,7 @@ export function ClientsView({ businesses, activeBusinessId }: ClientsViewProps) 
                 Launch an automated 14-day cash recovery pilot for another business
               </p>
             </div>
-          </button>
+          </Link>
         </div>
       </div>
     </div>

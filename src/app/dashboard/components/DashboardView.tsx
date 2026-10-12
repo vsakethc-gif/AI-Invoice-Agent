@@ -300,16 +300,14 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 self-end sm:self-auto">
-          <button
-            onClick={() => {
-              playPop();
-              window.dispatchEvent(new CustomEvent("open-onboard-client"));
-            }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition active:scale-95"
+          <Link
+            href="/dashboard/clients/new"
+            onClick={() => playPop()}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition active:scale-95"
           >
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>+ Onboard Client</span>
-          </button>
+          </Link>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-50 text-indigo-800 border border-indigo-200">
             <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
             Client Account Active
@@ -335,16 +333,14 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
 
         {/* Action Buttons with high-appeal interactive physics */}
         <div className="flex items-center flex-wrap gap-2.5">
-          <button
-            onClick={() => {
-              playPop();
-              window.dispatchEvent(new CustomEvent("open-onboard-client"));
-            }}
+          <Link
+            href="/dashboard/clients/new"
+            onClick={() => playPop()}
             className="inline-flex items-center gap-2 px-3.5 py-2.5 border border-indigo-200/90 shadow-sm text-xs font-bold rounded-xl text-indigo-700 bg-indigo-50/90 hover:bg-indigo-100 hover:border-indigo-300 active:scale-95 transition duration-150"
           >
             <Building2 className="w-4 h-4 text-indigo-600" />
             + Onboard Client
-          </button>
+          </Link>
 
           <SalesCheatSheetModal />
 

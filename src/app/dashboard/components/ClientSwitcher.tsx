@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createPortal } from "react-dom";
 import {
   Building2,
   ChevronDown,
@@ -27,8 +29,10 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [modalError, setModalError] = useState("");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleOpen = () => setIsModalOpen(true);
     window.addEventListener("open-onboard-client", handleOpen);
     return () => window.removeEventListener("open-onboard-client", handleOpen);
@@ -128,16 +132,17 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
                 >
                   {/* TOP CTA: Onboard New Client (Prominently at the top!) */}
                   <div className="p-3 bg-indigo-950/70 border-b border-indigo-800/50">
-                    <button
+                    <Link
+                      href="/dashboard/clients/new"
                       onClick={() => {
+                        playPop();
                         setIsOpen(false);
-                        setIsModalOpen(true);
                       }}
                       className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition active:scale-95"
                     >
                       <Plus className="w-4 h-4 stroke-[2.5]" />
                       <span>+ Onboard New Client</span>
-                    </button>
+                    </Link>
                     <p className="text-[10px] text-indigo-300 text-center mt-1.5 font-medium">
                       Launch 14-day cash recovery pilot
                     </p>
@@ -182,30 +187,30 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
         </div>
 
         {/* Dedicated Prominent Onboard Client Button in Sidebar */}
-        <button
-          onClick={() => {
-            playPop();
-            setIsModalOpen(true);
-          }}
+        <Link
+          href="/dashboard/clients/new"
+          onClick={() => playPop()}
           className="w-full flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold shadow-md shadow-indigo-600/25 border border-indigo-400/25 transition-all duration-150 active:scale-[0.98] group"
         >
           <div className="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
           </div>
           <span>+ Onboard New Client</span>
-        </button>
+        </Link>
       </div>
 
-      {/* Onboard Client Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden text-slate-900 my-auto flex flex-col max-h-[90vh]"
-            >
+      {/* Onboard Client Modal (Portaled directly to document.body so it NEVER gets trapped in the sidebar!) */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {isModalOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden text-slate-900 my-auto flex flex-col max-h-[90vh]"
+                >
               {/* Header */}
               <div className="px-6 py-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 flex-shrink-0">
                 <div className="flex items-center gap-3">
@@ -309,7 +314,9 @@ export function ClientSwitcher({ currentBusiness, businesses }: ClientSwitcherPr
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
-    </>
-  );
+      </AnimatePresence>,
+      document.body
+    )}
+  </>
+);
 }
