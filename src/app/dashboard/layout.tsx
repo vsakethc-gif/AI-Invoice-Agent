@@ -143,12 +143,12 @@ export default function DashboardLayout({
           <div className="bg-gradient-to-b from-slate-900 to-slate-950 p-3.5 rounded-xl border border-slate-800/80 shadow-sm text-xs">
             <div className="flex items-center justify-between text-slate-400 mb-1">
               <span className="font-semibold text-white flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-blue-400" /> Auto-Pilot Mode
+                <Sparkles className="w-3.5 h-3.5 text-indigo-400" /> Agency Portal
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20 font-mono">MVP</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-indigo-500/20 text-indigo-300 rounded-md border border-indigo-500/30 font-mono">ACTIVE</span>
             </div>
             <p className="text-slate-400 text-[11px] leading-relaxed">
-              Approval queue active. The agent will draft messages for your confirmation.
+              Managing cash recovery for your client businesses. Autonomous and approval queues running.
             </p>
           </div>
 

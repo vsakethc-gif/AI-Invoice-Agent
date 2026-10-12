@@ -2,39 +2,42 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, CheckCircle2, Zap, Clock, Mail } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Zap, Clock, Mail, ShieldCheck, TrendingUp, Users, DollarSign, Award, Building2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function LandingPage() {
   const triggerConfetti = () => {
     confetti({
-      particleCount: 100,
-      spread: 70,
+      particleCount: 120,
+      spread: 75,
       origin: { y: 0.6 },
-      colors: ['#0ea5e9', '#3b82f6', '#6366f1']
+      colors: ['#0ea5e9', '#3b82f6', '#10b981', '#6366f1']
     });
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950 font-sans selection:bg-blue-200">
+    <div className="min-h-screen bg-slate-50 text-slate-950 font-sans selection:bg-indigo-200">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">
-              N
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/20">
+              <Zap className="w-4 h-4 text-white" />
             </div>
-            <span className="font-semibold text-lg tracking-tight text-slate-900">InvoiceNudge</span>
+            <div>
+              <span className="font-bold text-base tracking-tight text-slate-900 block leading-tight">InvoiceNudge</span>
+              <span className="text-[9px] font-bold text-indigo-600 tracking-wider uppercase block">Agency A/R Suite</span>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-              Sign in
+          <div className="flex items-center gap-3">
+            <Link href="/login" className="text-xs font-bold text-slate-600 hover:text-slate-900 px-3 py-1.5 transition-colors">
+              Operator Sign in
             </Link>
             <Link 
               href="/signup" 
-              className="text-sm font-medium bg-slate-900 text-white px-4 py-2 rounded-full hover:bg-slate-800 transition-colors shadow-sm"
+              className="text-xs font-bold bg-indigo-600 text-white px-4 py-2 rounded-xl hover:bg-indigo-500 transition shadow-md shadow-indigo-600/20 active:scale-95"
             >
-              Get Started
+              Start Free Pilot
             </Link>
           </div>
         </div>
@@ -48,129 +51,177 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold mb-6 tracking-wide uppercase">
-              AI-Powered Accounts Receivable
+            <span className="inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold mb-6 tracking-wide uppercase">
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" /> Done-For-You Accounts Receivable
             </span>
-            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
-              Get paid faster without being the bad guy.
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-950 mb-6 leading-[1.1]">
+              Recover Unpaid Invoices For Your Business. <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">Zero Awkward Calls.</span>
             </h1>
-            <p className="text-xl text-slate-600 mb-10 leading-relaxed">
-              InvoiceNudge automatically drafts and sends polite, perfectly-timed follow-ups for your overdue invoices, reading replies to intelligently pause or stop.
+            <p className="text-lg sm:text-xl text-slate-600 mb-10 leading-relaxed font-normal max-w-2xl mx-auto">
+              We manage the follow-up process for busy businesses. Polite, autonomous, guardrail-protected emails that get your cash collected without damaging customer relationships.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
               <Link href="/signup">
                 <button 
                   onClick={triggerConfetti}
-                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-7 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-base shadow-lg shadow-indigo-600/25 active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
-                  Start your free trial <ArrowRight className="w-5 h-5" />
+                  Request a 14-Day Free Sprint <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
-              <Link href="#how-it-works">
-                <button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-semibold text-lg hover:bg-slate-50 transition-colors">
-                  See how it works
+              <Link href="#pricing">
+                <button className="w-full sm:w-auto px-7 py-3.5 bg-white text-slate-800 border border-slate-300 rounded-xl font-bold text-base hover:bg-slate-50 transition active:scale-95 shadow-sm">
+                  View Performance Pricing
                 </button>
               </Link>
+            </div>
+
+            <div className="mt-8 flex items-center justify-center gap-6 text-xs text-slate-500">
+              <span className="flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" /> 14-Day Risk-Free Trial
+              </span>
+              <span className="flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" /> No Software to Learn
+              </span>
+              <span className="flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Keep 100% of Recovered Cash
+              </span>
             </div>
           </motion.div>
         </div>
 
-        {/* Dashboard Preview */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-slate-200 bg-white"
-        >
-          <div className="h-8 bg-slate-100 border-b border-slate-200 flex items-center px-4 gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-400"></div>
-            <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-            <div className="w-3 h-3 rounded-full bg-green-400"></div>
+        {/* 3 Step Process: How It Works */}
+        <div className="py-16 max-w-5xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">The 3-Step No-Brainer Process</h2>
+            <p className="text-sm text-slate-500 mt-2">How we recover thousands in uncollected revenue with zero effort on your part.</p>
           </div>
-          <div className="p-2 sm:p-0 bg-slate-50">
-            <img 
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2000&q=80" 
-              alt="Dashboard Preview" 
-              className="w-full h-[400px] object-cover opacity-80"
-            />
-            {/* Overlay to abstract the stock image a bit */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-transparent to-transparent"></div>
-          </div>
-        </motion.div>
 
-        {/* Features */}
-        <div id="how-it-works" className="py-24 max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200"
-            >
-              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6">
-                <Clock className="w-6 h-6" />
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm relative">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-black text-sm flex items-center justify-center mb-4">
+                01
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Smart Scheduling</h3>
-              <p className="text-slate-600">Calculates exactly when to follow up based on due dates, skipping weekends and holidays so your emails land at the right time.</p>
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200"
-            >
-              <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-6">
-                <Zap className="w-6 h-6" />
+              <h3 className="text-base font-bold text-slate-900 mb-2">Send Your Overdue List</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Send us an export from QuickBooks, Stripe, or Excel. You don't need to log into or configure any software.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm relative">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 font-black text-sm flex items-center justify-center mb-4">
+                02
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">AI Drafting</h3>
-              <p className="text-slate-600">Generates polite, context-aware emails using LLMs, progressively escalating the tone while adhering to strict legal guardrails.</p>
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200"
-            >
-              <div className="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-6">
-                <Mail className="w-6 h-6" />
+              <h3 className="text-base font-bold text-slate-900 mb-2">Autonomous Polite Follow-Ups</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Our agent contacts clients in your company's name. Every email is verified by legal guardrails to protect your reputation.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm relative">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-black text-sm flex items-center justify-center mb-4">
+                03
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Reply Handling</h3>
-              <p className="text-slate-600">Reads inbound replies to instantly pause sequences if a customer says they've paid or promises a date, keeping you in the loop.</p>
-            </motion.div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Cash Hits Your Account</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Clients pay directly into your existing payment links. You receive weekly ROI progress reports showing every dollar collected.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Pricing */}
-        <div className="py-12 max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">Simple, Transparent Pricing</h2>
-          <p className="text-lg text-slate-600 mb-12">No hidden fees, no percentage cuts. Just a flat monthly rate.</p>
+        {/* Pricing Section - Tailored for High-Ticket B2B & Free Pilots */}
+        <div id="pricing" className="py-16 max-w-4xl mx-auto text-center">
+          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 px-3 py-1 bg-indigo-50 border border-indigo-200 rounded-full">
+            Partnership & Pricing
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-4 mb-2 tracking-tight">Simple, High-ROI Options</h2>
+          <p className="text-sm text-slate-500 mb-12">Start with a 100% free pilot to see the cash recovery in action first.</p>
           
-          <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden max-w-md mx-auto">
-            <div className="p-8 bg-slate-900 text-white">
-              <h3 className="text-2xl font-bold mb-2">Pro Plan</h3>
-              <div className="flex items-baseline justify-center gap-1">
-                <span className="text-5xl font-extrabold">$29</span>
-                <span className="text-slate-400">/mo</span>
+          <div className="grid md:grid-cols-2 gap-8 text-left">
+            {/* Free Trial Pilot Card */}
+            <div className="bg-white rounded-3xl border-2 border-slate-200 p-8 shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="inline-block text-[11px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full mb-4">
+                  Step 1: Test Us First
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 mb-1">14-Day Free Pilot</h3>
+                <p className="text-xs text-slate-500 mb-6">Experience the recovered revenue before paying a single dollar.</p>
+
+                <div className="flex items-baseline gap-1 mb-6">
+                  <span className="text-4xl font-black text-slate-900">$0</span>
+                  <span className="text-xs font-bold text-slate-400">/ 14 days</span>
+                </div>
+
+                <ul className="space-y-3 text-xs text-slate-700 mb-8">
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                    <span>Up to 10 overdue invoices processed</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                    <span>Polite AI drafting under your company name</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                    <span>Keep 100% of cash recovered</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                    <span>All we ask: A short review if you love the results</span>
+                  </li>
+                </ul>
               </div>
-            </div>
-            <div className="p-8 text-left">
-              <ul className="space-y-4 mb-8">
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <span className="text-slate-700">Unlimited invoices & reminders</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <span className="text-slate-700">Custom email sending domain</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <span className="text-slate-700">AI Reply Classification</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <span className="text-slate-700">Strict Guardrails included</span>
-                </li>
-              </ul>
+
               <Link href="/signup">
-                <button className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors">
-                  Get Started Now
+                <button className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition shadow-sm">
+                  Apply for Free Pilot
+                </button>
+              </Link>
+            </div>
+
+            {/* Managed Retainer / Performance */}
+            <div className="bg-slate-950 text-white rounded-3xl border-2 border-indigo-600 p-8 shadow-xl relative flex flex-col justify-between">
+              <div className="absolute -top-3.5 right-6 px-3 py-0.5 bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-[10px] font-black uppercase tracking-wider rounded-full shadow-md">
+                Most Popular
+              </div>
+
+              <div>
+                <div className="inline-block text-[11px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-950/80 border border-indigo-800 px-2.5 py-1 rounded-full mb-4">
+                  Step 2: Ongoing Autopilot
+                </div>
+                <h3 className="text-2xl font-black text-white mb-1">Managed Recovery</h3>
+                <p className="text-xs text-slate-400 mb-6">Full Done-For-You accounts receivable management year-round.</p>
+
+                <div className="flex items-baseline gap-1 mb-6">
+                  <span className="text-4xl font-black text-white">$950</span>
+                  <span className="text-xs font-bold text-slate-400">/mo or 10% performance</span>
+                </div>
+
+                <ul className="space-y-3 text-xs text-slate-300 mb-8">
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                    <span>Unlimited invoices & automated schedule</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                    <span>Custom tone & grace period controls</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                    <span>Inbound reply handling & dispute isolation</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                    <span>Weekly ROI performance reports</span>
+                  </li>
+                </ul>
+              </div>
+
+              <Link href="/signup">
+                <button className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-md shadow-indigo-600/30">
+                  Book Intro Call / Onboard
                 </button>
               </Link>
             </div>
@@ -179,17 +230,13 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white py-12">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-slate-900 flex items-center justify-center text-white font-bold text-xs">
-              N
-            </div>
-            <span className="font-semibold text-slate-900">InvoiceNudge</span>
+      <footer className="border-t border-slate-200 bg-white py-10">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+          <div className="flex items-center gap-2 font-bold text-slate-800">
+            <Zap className="w-4 h-4 text-indigo-600" />
+            <span>InvoiceNudge — Managed Accounts Receivable</span>
           </div>
-          <p className="text-sm text-slate-500">
-            © 2026 InvoiceNudge. A demo application.
-          </p>
+          <p>© 2026 InvoiceNudge. Done-For-You Business Cash Recovery.</p>
         </div>
       </footer>
     </div>

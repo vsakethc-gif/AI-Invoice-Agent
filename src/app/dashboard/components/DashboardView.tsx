@@ -32,6 +32,7 @@ import confetti from "canvas-confetti";
 import { playSuccess, playPop } from "@/utils/sfx";
 import { useRouter } from "next/navigation";
 import { DemoDataButton } from "./DemoDataButton";
+import { ClientReportModal } from "./ClientReportModal";
 import {
   updateInvoiceStatus,
   createDraftForInvoice,
@@ -282,24 +283,24 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
         )}
       </AnimatePresence>
 
-      {/* Compliance / Safety disclaimer banner */}
+      {/* Agency Client Safety disclaimer banner */}
       <motion.div
         initial={{ opacity: 0, y: -6 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-white border border-slate-200/90 rounded-2xl px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-sm hover:border-slate-300 transition"
       >
         <div className="flex items-center gap-3 text-xs text-slate-800">
-          <div className="w-7 h-7 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+          <div className="w-7 h-7 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
             <ShieldCheck className="w-4 h-4" />
           </div>
           <div>
-            <strong className="text-slate-950 font-bold">Safe & Compliant B2B Agent:</strong> Follow-ups are sent politely in your own company name. Hard guardrails prevent legal threats, deceptive tactics, or collections language.
+            <strong className="text-slate-950 font-bold">Managed Accounts Receivable Engine:</strong> Chasing unpaid invoices for <span className="font-bold text-indigo-600">{business.name}</span>. Hard guardrails guarantee 100% compliant, polite emails that preserve customer relationships.
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 self-end sm:self-auto">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Tenant Isolated (RLS)
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-800 border border-indigo-300">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+            Client Account Active
           </span>
         </div>
       </motion.div>
@@ -322,8 +323,14 @@ export function DashboardView({ business, initialInvoices }: DashboardViewProps)
 
         {/* Action Buttons with high-appeal interactive physics */}
         <div className="flex items-center flex-wrap gap-2.5">
-          <DemoDataButton />
-          
+          <ClientReportModal
+            businessName={business.name}
+            totalRecovered={metrics.find((m) => m.id === "recovered")?.value ? invoices.filter(i => i.status === "paid").reduce((s, i) => s + Number(i.amount || 0), 0) : 0}
+            paidCount={invoices.filter((i) => i.status === "paid").length}
+            overdueRemaining={invoices.filter((i) => (i.due_date < todayStr || i.status === "overdue") && i.status !== "paid").reduce((s, i) => s + Number(i.amount || 0), 0)}
+            overdueCount={invoices.filter((i) => (i.due_date < todayStr || i.status === "overdue") && i.status !== "paid").length}
+          />
+
           <Link
             href="/dashboard/invoices/upload"
             className="inline-flex items-center gap-2 px-3.5 py-2.5 border border-slate-300 shadow-sm text-xs font-bold rounded-xl text-slate-800 bg-white hover:bg-slate-50 hover:border-slate-400 active:scale-95 transition duration-150"
