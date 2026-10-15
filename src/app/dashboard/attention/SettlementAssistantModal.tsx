@@ -39,8 +39,8 @@ export function SettlementAssistantModal({
   const [isOpen, setIsOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [objectionType, setObjectionType] = useState<"cashflow" | "dispute" | "lost" | "extension">("cashflow");
-
-  const amountHalf = Math.round(invoice.amount / 2);
+  const numAmount = Number(invoice.amount || 0);
+  const amountHalf = Math.round(numAmount / 2);
 
   const plans = {
     cashflow: [

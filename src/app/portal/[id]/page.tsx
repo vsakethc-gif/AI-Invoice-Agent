@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { createAdminClient } from "@/utils/supabase/admin";
 import { ClientGuestPortalView } from "./ClientGuestPortalView";
 
 export const instant = false;
@@ -15,7 +15,7 @@ export default async function PortalPage({ params }: PortalPageProps) {
   await connection();
   const { id } = await params;
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: business } = await supabase
     .from("businesses")

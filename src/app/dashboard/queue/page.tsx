@@ -1,5 +1,6 @@
 import { connection } from "next/server";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { QueueView, type QueueMessage } from "./QueueView";
 import { activeModelLabel } from "@/lib/llm";
@@ -26,7 +27,22 @@ export default async function QueuePage() {
     const { data: first } = await supabase.from("businesses").select("*").eq("user_id", user.id).order("created_at", { ascending: true }).limit(1).single();
     business = first;
   }
-  if (!business) return null;
+  if (!business) {
+    return (
+      <div className="bg-white shadow-sm border border-slate-200 rounded-2xl p-12 text-center text-slate-500 space-y-3">
+        <h4 className="text-base font-bold text-slate-800">No Client Business Found</h4>
+        <p className="text-xs text-slate-500 max-w-sm mx-auto">
+          Please select or onboard a client business workspace to manage draft recovery emails.
+        </p>
+        <Link
+          href="/dashboard/clients/new"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-500 transition shadow-sm"
+        >
+          + Onboard Client Workspace
+        </Link>
+      </div>
+    );
+  }
 
   // Drafts waiting for the owner (RLS guarantees only this business's rows come back)
   const { data: pending, error } = await supabase

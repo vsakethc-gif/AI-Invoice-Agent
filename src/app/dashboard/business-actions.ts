@@ -91,6 +91,7 @@ export async function switchActiveBusiness(businessId: string) {
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/clients");
   revalidatePath("/dashboard/invoices");
   revalidatePath("/dashboard/queue");
   revalidatePath("/dashboard/attention");
@@ -143,8 +144,10 @@ export async function createClientBusiness(formData: FormData) {
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/clients");
   revalidatePath("/dashboard/invoices");
   revalidatePath("/dashboard/queue");
+  revalidatePath("/dashboard/attention");
   revalidatePath("/dashboard/settings");
 
   return { success: true, businessId: newBiz.id };

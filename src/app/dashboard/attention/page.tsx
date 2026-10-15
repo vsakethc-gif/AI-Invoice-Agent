@@ -27,10 +27,27 @@ export default async function NeedsAttentionPage() {
     business = first;
   }
 
+  if (!business) {
+    return (
+      <div className="bg-white shadow-sm border border-slate-200 rounded-2xl p-12 text-center text-slate-500 space-y-3">
+        <h4 className="text-base font-bold text-slate-800">No Client Business Found</h4>
+        <p className="text-xs text-slate-500 max-w-sm mx-auto">
+          Please onboard a client business workspace to manage disputed invoices and settlement negotiations.
+        </p>
+        <Link
+          href="/dashboard/clients/new"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-500 transition shadow-sm"
+        >
+          + Onboard Client Workspace
+        </Link>
+      </div>
+    );
+  }
+
   const { data: attentionInvoices = [] } = await supabase
     .from("invoices")
     .select("*")
-    .eq("business_id", business?.id)
+    .eq("business_id", business.id)
     .or("needs_attention.eq.true,status.eq.disputed")
     .order("due_date", { ascending: false });
 
